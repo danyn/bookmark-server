@@ -45,6 +45,10 @@ import http.server
 import requests
 from urllib.parse import unquote, parse_qs
 import os
+import threading
+from socketserver import ThreadingMixIn
+
+
 memory = {}
 
 form = '''<!DOCTYPE html>
@@ -72,7 +76,12 @@ error_message = '''<!DOCTYPE html>
 {}
 </pre>
 '''
-# 
+# create a constructor for a threadable http server by subclassing http.server
+
+class ThreadHTTPServer (ThreadingMixIn, http.server.HTTPServer):
+
+
+
 def CheckURI(uri, timeout=5):
     '''Check whether this URI is reachable, i.e. does it return a 200 OK?
 
@@ -160,5 +169,10 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT',8000))
     server_address = ('', port)
-    httpd = http.server.HTTPServer(server_address, Shortener)
+    httpd = ThreadHTTPServer(server_address, Shortener)
     httpd.serve_forever()
+
+
+
+
+# https://dashboard.heroku.com/apps/danyn-bookmark/logs

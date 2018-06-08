@@ -79,7 +79,7 @@ error_message = '''<!DOCTYPE html>
 # create a constructor for a threadable http server by subclassing http.server
 
 class ThreadHTTPServer (ThreadingMixIn, http.server.HTTPServer):
-
+    "This adds thread-based concurrency"
 
 
 def CheckURI(uri, timeout=5):
